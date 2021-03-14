@@ -9,13 +9,13 @@ public class PolynomialTest {
     Polynomial m=new Polynomial();
     Polynomial p=new Polynomial();
     Polynomial result= new Polynomial();
+
  @Test
     public void addAddTest(){
-     m=m.extractMonomial("2x^2+1");
-     p= p.extractMonomial("2x^2");
-     result=result.extractMonomial("4x^2+1");
+       m=m.extractMonomial("2x^2+1");
+       p= p.extractMonomial("2x^2");
+       result=result.extractMonomial("4x^2+1");
      assertTrue(m.addOrSubtractPolynomial(p, "add").equals(result));
-
  }
     @Test
     public void addSubtractTest(){

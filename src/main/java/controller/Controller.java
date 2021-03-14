@@ -32,7 +32,7 @@ public class Controller {
             public void actionPerformed(ActionEvent e) {
                 a = Polynomial.extractMonomial(view.getFirst());
                 b = Polynomial.extractMonomial(view.getSecond());
-                result = a.addOrSubtractPolynomial(b, "subtract");
+                result=a.addOrSubtractPolynomial(b, "substract");
                 view.setResult(result.toString());
             }
         });

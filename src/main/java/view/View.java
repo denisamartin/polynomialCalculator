@@ -70,7 +70,7 @@ public class View extends JPanel {
         firstLabel = new JLabel("First Polynomial");
         firstLabel.setForeground(new Color(254, 199, 254));
         firstLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-        firstLabel.setBounds(20, 67, 114, 38);
+        firstLabel.setBounds(20, 82, 114, 38);
         this.add(firstLabel);
 
         secondLabel = new JLabel("   Second Polynomial");
@@ -82,7 +82,7 @@ public class View extends JPanel {
         resultLabel = new JLabel("Result=");
         resultLabel.setForeground(new Color(254, 199, 254));
         resultLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-        resultLabel.setBounds(43, 235, 93, 38);
+        resultLabel.setBounds(40, 225, 93, 38);
         this.add(resultLabel);
 
         btnMultiply = new JButton("Multiply");

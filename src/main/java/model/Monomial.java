@@ -1,6 +1,6 @@
 package model;
 
-public class Monomial {
+public class Monomial implements Comparable<Monomial>{
     private int exponent;
     private double coeficient;
 
@@ -41,6 +41,11 @@ public class Monomial {
             return false;
         }
 
+    }
+    public int compareTo(Monomial x) {
+        Integer exponent1= new Integer(this.exponent);
+        Integer exponent2= new Integer(x.getExponent());
+        return exponent2.compareTo(exponent1);
     }
 
     public String toString() {
