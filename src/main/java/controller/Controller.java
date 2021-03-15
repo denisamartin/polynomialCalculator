@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Controller {
     private View view;
-    private Polynomial a = new Polynomial();
-    private Polynomial b = new Polynomial();
+    private Polynomial polynomial1 = new Polynomial();
+    private Polynomial polynomial2 = new Polynomial();
     private Polynomial result = new Polynomial();
 
     public Controller(View view) {
@@ -20,9 +20,9 @@ public class Controller {
         this.view.addAddListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                a = Polynomial.extractMonomial(view.getFirst());
-                b = Polynomial.extractMonomial(view.getSecond());
-                result = a.addOrSubtractPolynomial(b, "add");
+                polynomial1 = Polynomial.extractMonomial(view.getFirst());
+                polynomial2 = Polynomial.extractMonomial(view.getSecond());
+                result = polynomial1.add(polynomial2);
                 view.setResult(result.toString());
             }
         });
@@ -30,28 +30,28 @@ public class Controller {
         this.view.addSubtractListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                a = Polynomial.extractMonomial(view.getFirst());
-                b = Polynomial.extractMonomial(view.getSecond());
-                result=a.addOrSubtractPolynomial(b, "substract");
+                polynomial1 = Polynomial.extractMonomial(view.getFirst());
+                polynomial2 = Polynomial.extractMonomial(view.getSecond());
+                result= polynomial1.subtract(polynomial2);
                 view.setResult(result.toString());
             }
         });
         this.view.addMultiplyListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                a = Polynomial.extractMonomial(view.getFirst());
-                b = Polynomial.extractMonomial(view.getSecond());
-                result = a.multiply(b);
+                polynomial1 = Polynomial.extractMonomial(view.getFirst());
+                polynomial2 = Polynomial.extractMonomial(view.getSecond());
+                result = polynomial1.multiply(polynomial2);
                 view.setResult(result.toString());
             }
         });
         this.view.addDivideListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                a = Polynomial.extractMonomial(view.getFirst());
-                b = Polynomial.extractMonomial(view.getSecond());
+                polynomial1 = Polynomial.extractMonomial(view.getFirst());
+                polynomial2 = Polynomial.extractMonomial(view.getSecond());
                 ArrayList<Polynomial> resultDivide;
-                resultDivide = a.dividePolynomials(b);
+                resultDivide = polynomial1.divide(polynomial2);
                 view.setResult(resultDivide.toString());
             }
         });
@@ -59,16 +59,16 @@ public class Controller {
         this.view.addDerivationListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                a = Polynomial.extractMonomial(view.getFirst());
-                result = a.derivatePolynomial();
+                polynomial1 = Polynomial.extractMonomial(view.getFirst());
+                result = polynomial1.differentiate();
                 view.setResult(result.toString());
             }
         });
         this.view.addIntegrationListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                a = Polynomial.extractMonomial(view.getFirst());
-                result = a.integratePolynomial();
+                polynomial1 = Polynomial.extractMonomial(view.getFirst());
+                result = polynomial1.integrate();
                 view.setResult(result.toString());
             }
         });

@@ -1,149 +1,148 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class Polynomial {
-    private ArrayList<Monomial> monomialList = new ArrayList<>();
+    private static final Pattern pattern = Pattern.compile("((-?\\d+(?=x))?(-?[xX])(\\^(-?\\d+))?)|((-?)[xX])|(-?\\d+)");
+    private final ArrayList<Monomial> monomialList = new ArrayList<>();
 
     public static Polynomial extractMonomial(String input) {
-        Pattern p = Pattern.compile("((-?\\d+(?=x))?(-?[xX])(\\^(-?\\d+))?)|((-?)[xX])|(-?\\d+)");
-        Matcher m = p.matcher(input);
-        double x = 0;
-        int y = 0;
-        Polynomial polinom = new Polynomial();
-        while (m.find()) {
-            if (m.group(3) != null && m.group(2) != null) {
-                x = Double.valueOf(m.group(2));
-                y = (m.group(5) != null ? Integer.parseInt(m.group(5)) : 1);
+        Matcher matcher = pattern.matcher(input);
+        double coeficient;
+        int exponent = 0;
+        Polynomial polynomial = new Polynomial();
+        while (matcher.find()) {
+            if (matcher.group(3) != null && matcher.group(2) != null) {
+                coeficient = Double.parseDouble(matcher.group(2));
+                exponent = (matcher.group(5) != null ? Integer.parseInt(matcher.group(5)) : 1);
 
             } else {
-                x = Integer.parseInt(m.group());
+                coeficient = Integer.parseInt(matcher.group());
             }
-            Monomial monomial = new Monomial(x, y);
-            polinom.monomialList.add(monomial);
-            x = 0;
-            y = 0;
+            Monomial monomial = new Monomial(coeficient, exponent);
+            polynomial.monomialList.add(monomial);
+            exponent = 0;
         }
-        return polinom;
+        Collections.sort(polynomial.monomialList);
+        return polynomial;
     }
 
-    public Polynomial addOrSubtractPolynomial(Polynomial a, String op) {
+    public Polynomial add(Polynomial polynomial) {
         Polynomial result = new Polynomial();
-        Polynomial polinom1=copy(this);
-        Polynomial polinom2=copy(a);
-        int i = 0, j=0;
-        while (i < this.monomialList.size() && j < a.monomialList.size()) {
-            Monomial monom1 = this.monomialList.get(i);
-            Monomial monom2 = a.monomialList.get(j);
-            if (monom1.getExponent() == monom2.getExponent()) {
-                polinom1.monomialList.remove(monom1);
-                polinom2.monomialList.remove(monom2);
-                if (op.equals("add")) {
-                    result.monomialList.add(monom1.addMonomial(monom2));
-                    i++;
-                    j++;
-                } else {
-                    if (monom1.getCoeficient() == monom2.getCoeficient()) {
-                        i++;
-                        j++;
-                    } else {
-                        result.monomialList.add(monom1.subtract(monom2));
-                        i++;
-                        j++;
-                    }
-                }
+        Polynomial polynomial1 = copy(this);
+        Polynomial polynomial2 = copy(polynomial);
+        int i = 0;
+        int j = 0;
+        while (i < this.monomialList.size() && j < polynomial.monomialList.size()) {
+            Monomial monomial1 = this.monomialList.get(i);
+            Monomial monomial2 = polynomial.monomialList.get(j);
+            if (monomial1.getExponent() == monomial2.getExponent()) {
+                polynomial1.monomialList.remove(monomial1);
+                polynomial2.monomialList.remove(monomial2);
+                result.monomialList.add(monomial1.add(monomial2));
+                i++;
+                j++;
             } else {
-                if (monom1.getExponent() > monom2.getExponent()) {
+                if (monomial1.getExponent() > monomial2.getExponent()) {
                     i++;
                 } else {
                     j++;
                 }
             }
         }
-        result.monomialList.addAll(polinom1.monomialList);
-        result.monomialList.addAll(polinom2.monomialList);
+        result.monomialList.addAll(polynomial1.monomialList);
+        result.monomialList.addAll(polynomial2.monomialList);
         Collections.sort(result.monomialList);
         return result;
     }
 
 
-    public Polynomial multiply(Polynomial a) {
+    public Polynomial subtract(Polynomial polynomial) {
         Polynomial result = new Polynomial();
-        Polynomial intermediar = new Polynomial();
-        for (Monomial monom1: this.monomialList) {
-            for (Monomial monom2: a.monomialList) {
-                intermediar.monomialList.add(monom1.multiply(monom2));
-            }
-        }
-        for (int i = 0; i < intermediar.monomialList.size(); i++) {
-            if (!result.isInList(intermediar.monomialList.get(i))) {
-                int ok = 0;
-                Monomial rezultatSumaInter= intermediar.monomialList.get(i);
-                for (int j = i + 1; j < intermediar.monomialList.size() - 1; j++) {
-                    if (intermediar.monomialList.get(i).getExponent() == intermediar.monomialList.get(j).getExponent()){
-                        rezultatSumaInter = rezultatSumaInter.addMonomial(intermediar.monomialList.get(j));
-                        ok = 1;
-                    }
-                }
-                if (ok == 0) {
-                    result.monomialList.add(intermediar.monomialList.get(i));
+        Polynomial polynomial1 = copy(this);
+        Polynomial polynomial2 = copy(polynomial);
+        int i = 0;
+        int j = 0;
+        while (i < this.monomialList.size() && j < polynomial.monomialList.size()) {
+            Monomial monomial1 = this.monomialList.get(i);
+            Monomial monomial2 = polynomial.monomialList.get(j);
+            if (monomial1.getExponent() == monomial2.getExponent()) {
+                polynomial1.monomialList.remove(monomial1);
+                polynomial2.monomialList.remove(monomial2);
+                if (monomial1.getCoeficient() != monomial2.getCoeficient())
+                    result.monomialList.add(monomial1.subtract(monomial2));
+                i++;
+                j++;
+            } else {
+                if (monomial1.getExponent() > monomial2.getExponent()) {
+                    i++;
                 } else {
-                    result.monomialList.add(rezultatSumaInter);
+                    j++;
                 }
             }
         }
+        result.monomialList.addAll(polynomial1.monomialList);
+        result.monomialList.addAll(polynomial2.monomialList);
+        Collections.sort(result.monomialList);
         return result;
     }
 
 
-    public ArrayList<Polynomial> dividePolynomials(Polynomial d) {
-        ArrayList<Polynomial> rez = new ArrayList<>();
-        Polynomial q = new Polynomial();
-        Polynomial r = this;
-        while ((!r.monomialList.isEmpty()) && (getHighestExponent(r) >= getHighestExponent(d))) {
-            Monomial t;
-            t = r.monomialList.get(0).divide(d.monomialList.get(0));
-            q.monomialList.add(t);
-            r = r.addOrSubtractPolynomial(d.multiplyMonomialWithPolynomial(t), "subtract");
+    public Polynomial multiply(Polynomial polynomial) {
+        Polynomial normalizedPolynomial = new Polynomial();
+        Polynomial intermediar = new Polynomial();
+        for (Monomial monomial1 : this.monomialList) {
+            for (Monomial monomial2 : polynomial.monomialList) {
+                intermediar.monomialList.add(monomial1.multiply(monomial2));
+            }
         }
-        rez.add(q);
-        rez.add(r);
-        return rez;
+        normalizedPolynomial = normalize(intermediar, normalizedPolynomial);
+        return normalizedPolynomial;
     }
 
 
-    public Polynomial derivatePolynomial() {
+    public ArrayList<Polynomial> divide(Polynomial polynomial) {
+        ArrayList<Polynomial> result = new ArrayList<>();
+        Polynomial quotient = new Polynomial();
+        Polynomial remainder = this;
+        while ((!remainder.monomialList.isEmpty()) && (getHighestExponent(remainder) >= getHighestExponent(polynomial))) {
+            Monomial monomial = remainder.monomialList.get(0).divide(polynomial.monomialList.get(0));
+            quotient.monomialList.add(monomial);
+            remainder = remainder.subtract(polynomial.multiplyMonomialWithPolynomial(monomial));
+        }
+        result.add(quotient);
+        result.add(remainder);
+        return result;
+    }
+
+
+    public Polynomial differentiate() {
         Polynomial result = new Polynomial();
         for (Monomial monom : this.monomialList) {
             if (monom.getExponent() != 0) {
-                double coeficient = monom.getCoeficient() * monom.getExponent();
-                int exponent = monom.getExponent() - 1;
-                result.monomialList.add(new Monomial(coeficient, exponent));
+                result.monomialList.add(monom.differentiate());
             }
         }
         return result;
     }
 
 
-    public Polynomial integratePolynomial() {
+    public Polynomial integrate() {
         Polynomial result = new Polynomial();
         for (Monomial monom : this.monomialList) {
-            double coeficient = monom.getCoeficient() / (monom.getExponent() + 1);
-            int exponent = monom.getExponent() + 1;
-            result.monomialList.add(new Monomial(coeficient, exponent));
+            result.monomialList.add(monom.integrate());
         }
         return result;
     }
 
 
-    public boolean isInList(Monomial a) {
+    public boolean hasMonomialWithSameExponent(Monomial monomial) {
         for (Monomial monom : this.monomialList) {
-            if (a.getExponent() == monom.getExponent()) {
+            if (monomial.getExponent() == monom.getExponent()) {
                 return true;
             }
         }
@@ -151,9 +150,9 @@ public class Polynomial {
     }
 
 
-    public int getHighestExponent(Polynomial p) {
+    public int getHighestExponent(Polynomial polynomial) {
         int max = -9999;
-        for (Monomial monom: p.monomialList) {
+        for (Monomial monom : polynomial.monomialList) {
             if (max < monom.getExponent()) {
 
                 max = monom.getExponent();
@@ -162,43 +161,53 @@ public class Polynomial {
         return max;
     }
 
-    public Polynomial multiplyMonomialWithPolynomial(Monomial t) {
-        Polynomial rez = new Polynomial();
-        for (Monomial monom: this.monomialList) {
-            rez.monomialList.add(monom.multiply(t));
-        }
-        return rez;
-    }
-    public Polynomial copy( Polynomial p){
-        Polynomial result=new Polynomial();
-        for(Monomial monom: p.monomialList){
-            result.monomialList.add(monom);
+    public Polynomial multiplyMonomialWithPolynomial(Monomial monomial) {
+        Polynomial result = new Polynomial();
+        for (Monomial monom : this.monomialList) {
+            result.monomialList.add(monom.multiply(monomial));
         }
         return result;
+    }
 
- }
 
-    public boolean equals(Polynomial b){
+    public Polynomial copy(Polynomial polynomial) {
+        Polynomial result = new Polynomial();
+        result.monomialList.addAll(polynomial.monomialList);
+        return result;
+    }
+
+    public boolean equals(Polynomial polynomial) {
         int ok = 0;
         int i = 0;
-        while (i < this.monomialList.size() && i < b.monomialList.size()) {
-            if (!this.monomialList.get(i).equals(b.monomialList.get(i))) {
+        while (i < this.monomialList.size() && i < polynomial.monomialList.size()) {
+            if (!this.monomialList.get(i).equals(polynomial.monomialList.get(i))) {
                 ok = 1;
                 break;
             }
             i++;
         }
-        if (ok == 0) {
-            return true;
-        } else {
-            return false;
+        return ok == 0;
+    }
+
+    public Polynomial normalize(Polynomial intermediar, Polynomial normalizedPolynomial) {
+        for (int i = 0; i < intermediar.monomialList.size(); i++) {
+            if (!normalizedPolynomial.hasMonomialWithSameExponent(intermediar.monomialList.get(i))) {
+                Monomial rezultatSumaInter = intermediar.monomialList.get(i);
+                for (int j = i + 1; j < intermediar.monomialList.size() - 1; j++) {
+                    if (intermediar.monomialList.get(i).getExponent() == intermediar.monomialList.get(j).getExponent()) {
+                        rezultatSumaInter = rezultatSumaInter.add(intermediar.monomialList.get(j));
+                    }
+                }
+                normalizedPolynomial.monomialList.add(rezultatSumaInter);
+            }
         }
+        return normalizedPolynomial;
     }
 
     public String toString() {
-        String s = "";
-        for (Monomial monom: this.monomialList)
-            s += monom.toString();
-        return s;
+        StringBuilder s = new StringBuilder();
+        for (Monomial monom : this.monomialList)
+            s.append(monom.toString());
+        return s.toString();
     }
 }

@@ -6,60 +6,59 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PolynomialTest {
-    Polynomial m=new Polynomial();
-    Polynomial p=new Polynomial();
+    Polynomial polymonial1 =new Polynomial();
+    Polynomial polynomial2 =new Polynomial();
     Polynomial result= new Polynomial();
 
  @Test
     public void addAddTest(){
-       m=m.extractMonomial("2x^2+1");
-       p= p.extractMonomial("2x^2");
-       result=result.extractMonomial("4x^2+1");
-     assertTrue(m.addOrSubtractPolynomial(p, "add").equals(result));
+       polymonial1 = Polynomial.extractMonomial("2x^2+1");
+       polynomial2 = Polynomial.extractMonomial("2x^2");
+       result= Polynomial.extractMonomial("4x^2+1");
+     assertTrue(polymonial1.add(polynomial2).equals(result));
  }
     @Test
     public void addSubtractTest(){
-        m=m.extractMonomial("2x^2+1");
-        p= p.extractMonomial("1x^2");
-        result=result.extractMonomial("1x^2+1");
-        assertTrue(m.addOrSubtractPolynomial(p, "subtract").equals(result));
+        polymonial1 = Polynomial.extractMonomial("2x^2+1");
+        polynomial2 = Polynomial.extractMonomial("1x^2");
+        result= Polynomial.extractMonomial("1x^2+1");
+        assertTrue(polymonial1.subtract(polynomial2).equals(result));
 
     }
     @Test
     public void addMultiplyTest(){
-        m=m.extractMonomial("2x^2+1");
-        p= p.extractMonomial("1x^2");
-        result=result.extractMonomial("2x^4+1x^2");
-        assertTrue(m.multiply(p).equals(result));
+        polymonial1 = Polynomial.extractMonomial("2x^2+1");
+        polynomial2 = Polynomial.extractMonomial("1x^2");
+        result= Polynomial.extractMonomial("2x^4+1x^2");
+        assertTrue(polymonial1.multiply(polynomial2).equals(result));
 
     }
     @Test
 
     public void addDivideTest(){
         ArrayList<Polynomial> rez=new ArrayList<>();
-        int i=0;
-        m=Polynomial.extractMonomial("2x^4");
-        p= Polynomial.extractMonomial("1x^2");
+        polymonial1 =Polynomial.extractMonomial("2x^4");
+        polynomial2 = Polynomial.extractMonomial("1x^2");
         rez.add(Polynomial.extractMonomial("2x^2"));
         rez.add(new Polynomial());
-        assertTrue(m.dividePolynomials(p).get(0).equals(rez.get(0))&& m.dividePolynomials(p).get(1).equals(rez.get(1)));
+        assertTrue(polymonial1.divide(polynomial2).get(0).equals(rez.get(0))&& polymonial1.divide(polynomial2).get(1).equals(rez.get(1)));
 
     }
 
     @Test
     public void addDerivativeTest(){
 
-        m=Polynomial.extractMonomial("1x^3−2x^2+6x^1−5");
+        polymonial1 =Polynomial.extractMonomial("1x^3−2x^2+6x^1−5");
         result=Polynomial.extractMonomial("3x^2−4x^1+6");
-        assertTrue(m.derivatePolynomial().equals(result));
+        assertTrue(polymonial1.differentiate().equals(result));
 
     }
     @Test
     public void addIntegrateTest(){
 
-        m=Polynomial.extractMonomial("6x^2+1");
+        polymonial1 =Polynomial.extractMonomial("6x^2+1");
         result=Polynomial.extractMonomial("2x^3+1x^1");
-        assertTrue(m.integratePolynomial().equals(result));
+        assertTrue(polymonial1.integrate().equals(result));
 
     }
 

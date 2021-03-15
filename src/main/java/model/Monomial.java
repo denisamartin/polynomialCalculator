@@ -1,8 +1,8 @@
 package model;
 
 public class Monomial implements Comparable<Monomial>{
-    private int exponent;
-    private double coeficient;
+    private final int exponent;
+    private final double coeficient;
 
     public int getExponent() {
         return exponent;
@@ -18,7 +18,7 @@ public class Monomial implements Comparable<Monomial>{
     }
 
 
-    public Monomial addMonomial(Monomial monom1) {
+    public Monomial add(Monomial monom1) {
         return new Monomial(this.coeficient + monom1.coeficient, this.exponent);
     }
 
@@ -34,17 +34,21 @@ public class Monomial implements Comparable<Monomial>{
         return new Monomial(this.coeficient / monom.coeficient, this.exponent - monom.exponent);
     }
 
-    public boolean equals(Monomial b) {
-        if ((this.coeficient == b.getCoeficient()) && (this.exponent == b.getExponent())) {
-            return true;
-        } else {
-            return false;
-        }
-
+    public Monomial differentiate() {
+        return new Monomial(this.getCoeficient() * this.getExponent(),this.getExponent() - 1 );
     }
+
+    public Monomial integrate() {
+        return new Monomial(this.getCoeficient() / (this.getExponent() + 1), this.getExponent() + 1);
+    }
+
+    public boolean equals(Monomial b) {
+        return (this.coeficient == b.getCoeficient()) && (this.exponent == b.getExponent());
+    }
+
     public int compareTo(Monomial x) {
-        Integer exponent1= new Integer(this.exponent);
-        Integer exponent2= new Integer(x.getExponent());
+        Integer exponent1= this.exponent;
+        Integer exponent2= x.getExponent();
         return exponent2.compareTo(exponent1);
     }
 
