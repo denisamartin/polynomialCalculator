@@ -1,8 +1,13 @@
 package model;
 
-public class Monomial implements Comparable<Monomial>{
+public class Monomial implements Comparable<Monomial> {
     private final int exponent;
     private final double coeficient;
+
+    public Monomial(double coeficient, int exponent) {
+        this.coeficient = coeficient;
+        this.exponent = exponent;
+    }
 
     public int getExponent() {
         return exponent;
@@ -11,12 +16,6 @@ public class Monomial implements Comparable<Monomial>{
     public double getCoeficient() {
         return coeficient;
     }
-
-    public Monomial(double coeficient, int exponent) {
-        this.coeficient = coeficient;
-        this.exponent = exponent;
-    }
-
 
     public Monomial add(Monomial monom1) {
         return new Monomial(this.coeficient + monom1.coeficient, this.exponent);
@@ -35,7 +34,7 @@ public class Monomial implements Comparable<Monomial>{
     }
 
     public Monomial differentiate() {
-        return new Monomial(this.getCoeficient() * this.getExponent(),this.getExponent() - 1 );
+        return new Monomial(this.getCoeficient() * this.getExponent(), this.getExponent() - 1);
     }
 
     public Monomial integrate() {
@@ -47,8 +46,8 @@ public class Monomial implements Comparable<Monomial>{
     }
 
     public int compareTo(Monomial x) {
-        Integer exponent1= this.exponent;
-        Integer exponent2= x.getExponent();
+        Integer exponent1 = this.exponent;
+        Integer exponent2 = x.getExponent();
         return exponent2.compareTo(exponent1);
     }
 
@@ -62,9 +61,9 @@ public class Monomial implements Comparable<Monomial>{
                 }
             } else {
                 if (this.exponent != 0) {
-                    return  (int) this.coeficient + "x^" + this.exponent;
+                    return (int) this.coeficient + "x^" + this.exponent;
                 } else {
-                    return  ""+ (int) this.coeficient;
+                    return "" + (int) this.coeficient;
                 }
             }
         } else {
@@ -76,7 +75,7 @@ public class Monomial implements Comparable<Monomial>{
                 }
             } else {
                 if (this.exponent != 0) {
-                    return  + this.coeficient + "x^" + this.exponent;
+                    return +this.coeficient + "x^" + this.exponent;
                 } else {
                     return "" + this.coeficient;
                 }

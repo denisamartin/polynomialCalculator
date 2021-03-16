@@ -204,6 +204,10 @@ public class Polynomial {
         return normalizedPolynomial;
     }
 
+    public ArrayList<Monomial> getMonomialList() {
+        return monomialList;
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (Monomial monom : this.monomialList)
